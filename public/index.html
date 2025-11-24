@@ -2,467 +2,410 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoológico - Gerenciamento de Animais</title>
-
-    <!-- Fonte Google mais moderna -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    <meta name="description" content="Sistema profissional de gerenciamento de animais do zoológico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: "Poppins", Arial, sans-serif;
-            background: radial-gradient(circle at top, #3b82f6 0, #1d2433 45%, #020617 100%);
-            min-height: 100vh;
-            color: #0f172a;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #fafafa;
+            color: #1e293b;
+            line-height: 1.5;
         }
 
-        .page-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            padding: 32px 16px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
-        .app-card {
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 18px;
-            padding: 24px 24px 28px;
-            box-shadow:
-                0 18px 45px rgba(0, 0, 0, 0.55),
-                0 0 0 1px rgba(148, 163, 184, 0.15);
-            backdrop-filter: blur(10px);
-            color: #e5e7eb;
+        /* Header */
+        .header {
+            margin-bottom: 32px;
         }
 
-        .app-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .app-title {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .app-title h1 {
-            margin: 0;
-            font-size: 1.8rem;
+        .header h1 {
+            font-size: 1.875rem;
             font-weight: 600;
-            letter-spacing: 0.03em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 8px;
+            color: #0f172a;
         }
 
-        .app-title h1 span.logo-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #22c55e, #3b82f6);
-            color: #0b1120;
-            font-size: 1.3rem;
-            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.7);
+        .header p {
+            color: #64748b;
+            font-size: 0.95rem;
         }
 
-        .app-title p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #9ca3af;
-        }
-
-        .app-status-chip {
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            color: #e5e7eb;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(15, 23, 42, 0.7);
-        }
-
-        .app-status-chip span.dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
-        }
-
-        /* Layout principal */
-        .layout-grid {
+        /* Layout */
+        .grid {
             display: grid;
-            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
-            gap: 18px;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            align-items: start;
         }
 
-        @media (max-width: 900px) {
-            .layout-grid {
-                grid-template-columns: minmax(0, 1fr);
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* Card de formulário */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Card */
         .card {
-            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), transparent 55%),
-                        rgba(15, 23, 42, 0.85);
-            border-radius: 16px;
-            padding: 16px 16px 18px;
-            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            gap: 8px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .card-header h2 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .card-header h2 span.bar {
-            width: 4px;
-            height: 18px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, #3b82f6, #22c55e);
-        }
-
-        .card-header small {
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
-
-        form {
-            margin-top: 4px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                flex-direction: column;
-            }
-        }
-
-        .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 0.8rem;
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
             margin-bottom: 4px;
-            color: #cbd5f5;
         }
 
-        input, select {
-            padding: 7px 9px;
-            border-radius: 10px;
-            border: 1px solid rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.7);
-            color: #e5e7eb;
-            font-size: 0.85rem;
-            outline: none;
-            transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        .card-description {
+            font-size: 0.875rem;
+            color: #64748b;
         }
 
-        input::placeholder {
-            color: #6b7280;
+        .card-content {
+            padding: 24px;
         }
 
-        input:focus, select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.7);
-            background: rgba(15, 23, 42, 0.95);
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .btn-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .btn {
-            border: none;
-            border-radius: 999px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, opacity 0.12s ease;
-            white-space: nowrap;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #22c55e);
-            color: #0b1120;
-            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25);
-        }
-
-        .btn-secondary {
-            background: rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.6);
-            opacity: 0.96;
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: none;
-            opacity: 0.9;
-        }
-
-        .filters-row {
-            margin-top: 8px;
-        }
-
-        .filters-row .form-row {
+        .form-group:last-child {
             margin-bottom: 0;
         }
 
-        .chip-label {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 4px;
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 6px;
         }
 
-        /* Tabela */
-        .table-wrapper {
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            background: white;
+            color: #1e293b;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input.error,
+        select.error {
+            border-color: #ef4444;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
             margin-top: 4px;
-            max-height: 470px;
-            overflow: auto;
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 55%),
-                        rgba(15, 23, 42, 0.9);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 20px 0;
+        }
+
+        /* Filter section */
+        .filters-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .filter-content.show {
+            max-height: 500px;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: #64748b;
+            border-radius: 6px;
+        }
+
+        .btn-icon:hover {
+            background: #f1f5f9;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
-        }
-
-        thead {
-            position: sticky;
-            top: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-            z-index: 2;
-        }
-
-        th, td {
-            padding: 8px 10px;
-            text-align: left;
+            font-size: 0.875rem;
         }
 
         th {
+            background: #f8fafc;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #9ca3af;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.4);
-        }
-
-        tbody tr {
-            border-bottom: 1px solid rgba(30, 41, 59, 0.85);
-            transition: background 0.12s ease;
-        }
-
-        tbody tr:nth-child(even) {
-            background: rgba(15, 23, 42, 0.45);
-        }
-
-        tbody tr:hover {
-            background: rgba(37, 99, 235, 0.3);
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         td {
-            color: #e5e7eb;
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
         }
 
-        td small {
-            color: #9ca3af;
+        tr:last-child td {
+            border-bottom: none;
         }
 
-        .actions {
-            white-space: nowrap;
+        tbody tr:hover {
+            background: #f8fafc;
         }
 
-        .btn-table {
-            padding: 4px 10px;
-            font-size: 0.72rem;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            margin-right: 4px;
-            background: rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-        }
-
-        .btn-table.btn-edit {
-            border-color: rgba(59, 130, 246, 0.75);
-        }
-
-        .btn-table.btn-delete {
-            border-color: rgba(239, 68, 68, 0.8);
-        }
-
-        .btn-table:hover {
-            background: rgba(15, 23, 42, 1);
-        }
-
-        /* Badges de condição de saúde */
+        /* Badge */
         .badge {
             display: inline-flex;
             align-items: center;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 500;
-            letter-spacing: 0.03em;
         }
 
-        .badge span.dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            margin-right: 5px;
-        }
-
-        .badge-healthy {
-            background: rgba(22, 163, 74, 0.12);
-            color: #bbf7d0;
-            border: 1px solid rgba(34, 197, 94, 0.6);
-        }
-
-        .badge-healthy span.dot {
-            background: #22c55e;
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
         }
 
         .badge-warning {
-            background: rgba(245, 158, 11, 0.12);
-            color: #facc15;
-            border: 1px solid rgba(245, 158, 11, 0.7);
-        }
-
-        .badge-warning span.dot {
-            background: #f59e0b;
+            background: #fef3c7;
+            color: #92400e;
         }
 
         .badge-danger {
-            background: rgba(248, 113, 113, 0.12);
-            color: #fecaca;
-            border: 1px solid rgba(248, 113, 113, 0.8);
+            background: #fee2e2;
+            color: #991b1b;
         }
 
-        .badge-danger span.dot {
-            background: #ef4444;
+        /* Action buttons in table */
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
         }
 
-        .pill-tag {
-            padding: 2px 8px;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.55);
-            font-size: 0.7rem;
-            color: #cbd5f5;
-            background: rgba(15, 23, 42, 0.8);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        .btn-action {
+            background: transparent;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            color: #64748b;
+            border-radius: 6px;
+            transition: all 0.2s;
         }
 
-        .pill-tag span {
-            font-size: 0.95rem;
+        .btn-action:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .btn-action.delete:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Empty state */
+        .empty-state {
+            padding: 48px 24px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sidebar-card {
+            margin-bottom: 16px;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
         }
     </style>
 </head>
 <body>
-<div class="page-wrapper">
-    <div class="app-card">
-        <div class="app-header">
-            <div class="app-title">
-                <h1>
-                    Zoológico – Painel de Animais
-                </h1>
-                <p>Cadastre, atualize e monitore os animais, espécies e habitats do parque.</p>
-            </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Zoológico – Painel de Animais</h1>
+            <p>Cadastre, atualize e monitore os animais, espécies e habitats do parque.</p>
         </div>
 
-        <div class="layout-grid">
-            <!-- COLUNA ESQUERDA: FORMULÁRIO + FILTROS -->
+        <div class="grid">
+            <!-- Left Column: Form -->
             <div class="card">
                 <div class="card-header">
-                    <h2>
-                        <span class="bar"></span>
-                        Cadastro de animal
-                    </h2>
-                    <small>Preencha os dados e salve para criar ou atualizar.</small>
+                    <h2 class="card-title" id="formTitle">Cadastro de Animal</h2>
+                    <p class="card-description" id="formDescription">Preencha os dados para cadastrar um animal</p>
                 </div>
+                <div class="card-content">
+                    <form id="animalForm">
+                        <input type="hidden" id="animalId">
 
-                <form id="animalForm">
-                    <!-- ID oculto para edição -->
-                    <input type="hidden" id="animalId">
-
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="nome">Nome do animal</label>
-                            <input type="text" id="nome" required placeholder="Ex.: Simba, Nala, Pingo">
+                            <label for="nome">Nome do animal *</label>
+                            <input type="text" id="nome" placeholder="Ex.: Simba, Nala, Pingo" required maxlength="50">
+                            <div class="error-message" id="nomeError">Nome é obrigatório (máx. 50 caracteres)</div>
                         </div>
+
                         <div class="form-group">
-                            <label for="dataNascimento">Data de nascimento</label>
+                            <label for="dataNascimento">Data de nascimento *</label>
                             <input type="date" id="dataNascimento" required>
+                            <div class="error-message" id="dataError">Data não pode ser no futuro</div>
                         </div>
-                    </div>
 
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="sexo">Sexo</label>
+                            <label for="sexo">Sexo *</label>
                             <select id="sexo" required>
                                 <option value="">Selecione...</option>
                                 <option value="M">Macho</option>
                                 <option value="F">Fêmea</option>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label for="condicaoSaude">Condição de saúde</label>
+                            <label for="condicaoSaude">Condição de saúde *</label>
                             <select id="condicaoSaude" required>
                                 <option value="">Selecione...</option>
                                 <option value="Saudável">Saudável</option>
@@ -470,98 +413,443 @@
                                 <option value="Em tratamento">Em tratamento</option>
                             </select>
                         </div>
-                    </div>
 
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="especie">Espécie</label>
+                            <label for="especie">Espécie *</label>
                             <select id="especie" required>
-                                <!-- preenchido via JS -->
+                                <option value="">Selecione...</option>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label for="habitat">Habitat</label>
+                            <label for="habitat">Habitat *</label>
                             <select id="habitat" required>
-                                <!-- preenchido via JS -->
+                                <option value="">Selecione...</option>
                             </select>
                         </div>
-                    </div>
 
-                    <div class="btn-row">
-                        <button type="submit" id="btnSalvar" class="btn btn-primary">
-                             <span>Salvar</span>
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
-                            Limpar
-                        </button>
-                    </div>
-                </form>
+                        <div class="separator"></div>
 
-                <div class="filters-row" style="margin-top: 16px;">
-                    <div class="card-header" style="margin-bottom: 8px;">
-                        <h2>
-                            <span class="bar"></span>
-                            Filtros rápidos
-                        </h2>
-                        <small>Use para consultar por espécie ou tipo de habitat.</small>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <span class="chip-label">Filtrar por espécie (nome comum)</span>
-                            <input type="text" id="filtroEspecie" placeholder="Ex.: Leão, Elefante">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <span>➕</span>
+                                <span>Cadastrar</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                                Limpar
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <span class="chip-label">Filtrar por tipo de habitat</span>
-                            <input type="text" id="filtroHabitat" placeholder="Ex.: savana, aquático, deserto">
-                        </div>
-                    </div>
-
-                    <div class="btn-row" style="margin-top: 10px;">
-                        <button type="button" class="btn btn-secondary" onclick="aplicarFiltros()">
-                            Aplicar filtros
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="listarAnimais()">
-                            Limpar filtros
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
 
-            <!-- COLUNA DIREITA: TABELA -->
-            <div class="card">
-                <div class="card-header" style="margin-bottom: 6px;">
-                    <h2>
-                        <span class="bar"></span>
-                        Lista de animais
-                    </h2>
+            <!-- Right Column: Filters + Table -->
+            <div class="right-column">
+                <!-- Filters Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="filters-toggle">
+                            <div>
+                                <h2 class="card-title">Filtros</h2>
+                                <p class="card-description">Filtre a lista de animais</p>
+                            </div>
+                            <button class="btn-icon" onclick="toggleFilters()">
+                                <span id="filterIcon">🔽</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filter-content show" id="filterContent">
+                        <div class="card-content">
+                            <div class="form-group">
+                                <label for="filtroEspecie">Espécie</label>
+                                <input type="text" id="filtroEspecie" placeholder="Ex.: Leão, Elefante">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="filtroHabitat">Habitat</label>
+                                <input type="text" id="filtroHabitat" placeholder="Ex.: Savana, Tropical">
+                            </div>
+
+                            <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%;">
+                                Limpar filtros
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="table-wrapper">
-                    <table id="tabelaAnimais">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Animal</th>
-                            <th>Espécie</th>
-                            <th>Habitat</th>
-                            <th>Sexo</th>
-                            <th>Data nasc.</th>
-                            <th>Condição</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- preenchido via JS -->
-                        </tbody>
-                    </table>
+                <!-- Table Card -->
+                <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Lista de Animais</h2>
+                    <p class="card-description" id="animalCount">0 animais cadastrados</p>
+                </div>
+                <div class="card-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Animal</th>
+                                    <th>Espécie</th>
+                                    <th>Habitat</th>
+                                    <th>Sexo</th>
+                                    <th>Nascimento</th>
+                                    <th>Condição</th>
+                                    <th style="text-align: right;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Seu JS atual continua igual -->
-<script src="script.js"></script>
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Constants
+        const STORAGE_KEY = 'zoo_animals';
+        
+        // Data
+        const especies = [
+            { id: "1", nome: "Leão" },
+            { id: "2", nome: "Elefante Africano" },
+            { id: "3", nome: "Tigre de Bengala" },
+            { id: "4", nome: "Panda Gigante" },
+            { id: "5", nome: "Girafa" }
+        ];
+
+        const habitats = [
+            { id: "1", tipo: "Savana Africana" },
+            { id: "2", tipo: "Floresta Tropical" },
+            { id: "3", tipo: "Aquário Marinho" },
+            { id: "4", tipo: "Floresta Temperada" }
+        ];
+
+        const defaultAnimals = [
+            {
+                id: "1",
+                nome: "Simba",
+                dataNascimento: "2020-05-15",
+                sexo: "M",
+                condicaoSaude: "Saudável",
+                especie: "Leão",
+                habitat: "Savana Africana"
+            },
+            {
+                id: "2",
+                nome: "Nala",
+                dataNascimento: "2021-08-22",
+                sexo: "F",
+                condicaoSaude: "Em observação",
+                especie: "Leão",
+                habitat: "Savana Africana"
+            },
+            {
+                id: "3",
+                nome: "Dumbo",
+                dataNascimento: "2018-03-10",
+                sexo: "M",
+                condicaoSaude: "Saudável",
+                especie: "Elefante Africano",
+                habitat: "Savana Africana"
+            }
+        ];
+
+        let animals = [];
+        let editingId = null;
+
+        // Local Storage functions
+        function loadFromStorage() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    animals = JSON.parse(stored);
+                } else {
+                    animals = [...defaultAnimals];
+                    saveToStorage();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                animals = [...defaultAnimals];
+            }
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(animals));
+            } catch (error) {
+                console.error('Erro ao salvar dados:', error);
+                showToast('Erro ao salvar dados');
+            }
+        }
+
+        // Initialize
+        function init() {
+            loadFromStorage();
+            populateSelects();
+            renderTable();
+            setupEventListeners();
+            initializeFilterIcon();
+        }
+
+        function initializeFilterIcon() {
+            const content = document.getElementById('filterContent');
+            const icon = document.getElementById('filterIcon');
+            icon.textContent = content.classList.contains('show') ? '🔼' : '🔽';
+        }
+
+        function populateSelects() {
+            const especieSelect = document.getElementById('especie');
+            const habitatSelect = document.getElementById('habitat');
+
+            especies.forEach(esp => {
+                const option = document.createElement('option');
+                option.value = esp.nome;
+                option.textContent = esp.nome;
+                especieSelect.appendChild(option);
+            });
+
+            habitats.forEach(hab => {
+                const option = document.createElement('option');
+                option.value = hab.tipo;
+                option.textContent = hab.tipo;
+                habitatSelect.appendChild(option);
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('animalForm').addEventListener('submit', handleSubmit);
+            document.getElementById('filtroEspecie').addEventListener('input', renderTable);
+            document.getElementById('filtroHabitat').addEventListener('input', renderTable);
+        }
+
+        function validateForm() {
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+
+            // Validate nome
+            const nome = document.getElementById('nome').value.trim();
+            if (!nome || nome.length === 0) {
+                showFieldError('nome', 'nomeError');
+                isValid = false;
+            } else if (nome.length > 50) {
+                showFieldError('nome', 'nomeError');
+                isValid = false;
+            }
+
+            // Validate data de nascimento
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            if (!dataNascimento) {
+                showFieldError('dataNascimento', 'dataError');
+                isValid = false;
+            } else {
+                const selectedDate = new Date(dataNascimento + 'T00:00:00');
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate > today) {
+                    showFieldError('dataNascimento', 'dataError');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(fieldId, errorId) {
+            document.getElementById(fieldId).classList.add('error');
+            document.getElementById(errorId).classList.add('show');
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                showToast('Por favor, corrija os erros no formulário');
+                return;
+            }
+
+            const formData = {
+                nome: document.getElementById('nome').value.trim(),
+                dataNascimento: document.getElementById('dataNascimento').value,
+                sexo: document.getElementById('sexo').value,
+                condicaoSaude: document.getElementById('condicaoSaude').value,
+                especie: document.getElementById('especie').value,
+                habitat: document.getElementById('habitat').value
+            };
+
+            if (editingId) {
+                const index = animals.findIndex(a => a.id === editingId);
+                animals[index] = { ...formData, id: editingId };
+                showToast('Animal atualizado com sucesso!');
+                editingId = null;
+                updateFormTitle(false);
+            } else {
+                const newAnimal = { ...formData, id: Date.now().toString() };
+                animals.push(newAnimal);
+                showToast('Animal cadastrado com sucesso!');
+            }
+
+            saveToStorage();
+            clearForm();
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const filteredAnimals = getFilteredAnimals();
+
+            if (filteredAnimals.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum animal encontrado</td></tr>';
+            } else {
+                tbody.innerHTML = filteredAnimals.map(animal => `
+                    <tr>
+                        <td style="font-weight: 500;">${animal.nome}</td>
+                        <td>${animal.especie}</td>
+                        <td style="color: #64748b;">${animal.habitat}</td>
+                        <td>${animal.sexo === 'M' ? 'Macho' : 'Fêmea'}</td>
+                        <td>${formatDate(animal.dataNascimento)}</td>
+                        <td>
+                            <span class="badge ${getBadgeClass(animal.condicaoSaude)}">
+                                ${animal.condicaoSaude}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn-action" onclick="editAnimal('${animal.id}')" title="Editar">
+                                    ✏️
+                                </button>
+                                <button class="btn-action delete" onclick="deleteAnimal('${animal.id}')" title="Excluir">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            updateCount(filteredAnimals.length);
+        }
+
+        function getFilteredAnimals() {
+            const especieFilter = document.getElementById('filtroEspecie').value.toLowerCase();
+            const habitatFilter = document.getElementById('filtroHabitat').value.toLowerCase();
+
+            return animals.filter(animal => {
+                const matchEspecie = !especieFilter || animal.especie.toLowerCase().includes(especieFilter);
+                const matchHabitat = !habitatFilter || animal.habitat.toLowerCase().includes(habitatFilter);
+                return matchEspecie && matchHabitat;
+            });
+        }
+
+        function editAnimal(id) {
+            const animal = animals.find(a => a.id === id);
+            if (!animal) return;
+
+            document.getElementById('animalId').value = animal.id;
+            document.getElementById('nome').value = animal.nome;
+            document.getElementById('dataNascimento').value = animal.dataNascimento;
+            document.getElementById('sexo').value = animal.sexo;
+            document.getElementById('condicaoSaude').value = animal.condicaoSaude;
+            document.getElementById('especie').value = animal.especie;
+            document.getElementById('habitat').value = animal.habitat;
+
+            editingId = id;
+            updateFormTitle(true);
+            showToast('Editando animal');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteAnimal(id) {
+            if (confirm('Tem certeza que deseja excluir este animal?')) {
+                animals = animals.filter(a => a.id !== id);
+                saveToStorage();
+                renderTable();
+                showToast('Animal removido com sucesso!');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('animalForm').reset();
+            document.getElementById('animalId').value = '';
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+            editingId = null;
+            updateFormTitle(false);
+        }
+
+        function updateFormTitle(isEditing) {
+            const title = document.getElementById('formTitle');
+            const description = document.getElementById('formDescription');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (isEditing) {
+                title.textContent = 'Editar Animal';
+                description.textContent = 'Preencha os dados para atualizar o animal';
+                submitBtn.innerHTML = '<span>✏️</span><span>Atualizar</span>';
+            } else {
+                title.textContent = 'Cadastro de Animal';
+                description.textContent = 'Preencha os dados para cadastrar um animal';
+                submitBtn.innerHTML = '<span>➕</span><span>Cadastrar</span>';
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('filtroEspecie').value = '';
+            document.getElementById('filtroHabitat').value = '';
+            renderTable();
+        }
+
+        function toggleFilters() {
+            const content = document.getElementById('filterContent');
+            const icon = document.getElementById('filterIcon');
+            content.classList.toggle('show');
+            icon.textContent = content.classList.contains('show') ? '🔼' : '🔽';
+        }
+
+        function updateCount(count) {
+            document.getElementById('animalCount').textContent = 
+                `${count} ${count === 1 ? 'animal cadastrado' : 'animais cadastrados'}`;
+        }
+
+        function getBadgeClass(status) {
+            switch (status) {
+                case 'Saudável':
+                    return 'badge-success';
+                case 'Em observação':
+                    return 'badge-warning';
+                case 'Em tratamento':
+                    return 'badge-danger';
+                default:
+                    return 'badge-success';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize on load
+        init();
+    </script>
 </body>
 </html>
